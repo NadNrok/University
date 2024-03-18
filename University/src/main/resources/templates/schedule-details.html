@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Schedule Details</title>
+    <a href="/" class="btn btn-primary mt-3">Main page</a>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container mt-5" th:if="${role == 'ADMIN'}">
+        <h1>Schedule Details</h1>
+
+        <div th:if="${schedule != null}">
+            <div class="card my-3">
+                <div class="card-header">
+                    Schedule Information
+                </div>
+                <div class="card-body">
+                    <form th:action="@{/schedule-details/{id}/update(id=${schedule.scheduleId})}" th:object="${schedule}" method="post">
+                        <div class="mb-3">
+                            <label for="date" class="form-label">Date:</label>
+                            <input type="date" class="form-control" id="date" th:field="*{date}" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="time" class="form-label">Time:</label>
+                            <input type="text" class="form-control" id="time" th:field="*{time}"
+                                pattern="^(?:[01]\d|2[0123]):(?:[012345]\d)$" placeholder="HH:MM" required>
+                            <small>Format: HH:MM (e.g., 04:35, 14:59, 21:10)</small>
+                        </div>
+                        <div class="mb-3">
+                            <label for="classroom" class="form-label">Classroom:</label>
+                            <select class="form-select" id="classroom" name="classroomId" required>
+                                <option th:each="classroom : ${classrooms}" th:value="${classroom.classroomId}"
+                                    th:text="${classroom.name}">Classroom</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="teacher" class="form-label">Teacher:</label>
+                            <select class="form-select" id="teacher" name="teacherId" required>
+                                <option th:each="teacher : ${teachers}" th:value="${teacher.teacherId}"
+                                    th:text="${teacher.name}">Teacher</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Update</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
