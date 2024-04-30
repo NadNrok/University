@@ -39,4 +39,7 @@ public class CourseTeacherService {
     public void deleteCourseTeacherById(Long id) {
         courseTeacherRepository.deleteById(id);
     }
+    public Long getCourseTeacherIdByTeacherIdAndCourseId(Long teacherId, Long courseId) {
+        return courseTeacherRepository.findCourseTeacherIdByTeacherIdAndCourseId(teacherId, courseId);
+    }
 }
