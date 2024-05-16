@@ -1,91 +1,39 @@
 package com.fm.University.controller;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-
-import java.util.Collection;
-import java.util.Collections;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 @ExtendWith(SpringExtension.class)
-@WebMvcTest(MainController.class)
+@SpringBootTest
+@AutoConfigureMockMvc
 public class MainControllerTest {
 
-    @Autowired
-    private MockMvc mockMvc;
+	@Autowired
+	private MockMvc mockMvc;
 
-    @BeforeEach
-    void setUp() {
-        mockMvc = MockMvcBuilders.standaloneSetup(new MainController()).build();
-    }
-
-    @Test
-    public void testIndex() throws Exception {
-        mockMvc.perform(get("/"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("index"))
-                .andExpect(model().attributeExists("role"));
-    }
-
-    @SuppressWarnings("serial")
 	@Test
-    public void testIndexWithRole() throws Exception {
-        Authentication authentication = new Authentication() {
-            @Override
-            public Collection<? extends GrantedAuthority> getAuthorities() {
-                return Collections.singletonList(() -> "ROLE_USER");
-            }
+	@WithMockUser(authorities = "ROLE_USER")
+	public void testIndexPageForUserRole() throws Exception {
+		mockMvc.perform(MockMvcRequestBuilders.get("/")).andExpect(MockMvcResultMatchers.status().isOk())
+				.andExpect(MockMvcResultMatchers.view().name("index"))
+				.andExpect(MockMvcResultMatchers.model().attributeExists("role"))
+				.andExpect(MockMvcResultMatchers.model().attribute("role", "ROLE_USER"));
+	}
 
-            @Override
-            public Object getCredentials() {
-                return null;
-            }
-
-            @Override
-            public Object getDetails() {
-                return null;
-            }
-
-            @Override
-            public Object getPrincipal() {
-                return null;
-            }
-
-            @Override
-            public boolean isAuthenticated() {
-                return false;
-            }
-
-            @Override
-            public void setAuthenticated(boolean isAuthenticated) throws IllegalArgumentException {
-
-            }
-
-            @Override
-            public String getName() {
-                return null;
-            }
-        };
-
-        SecurityContext securityContext = SecurityContextHolder.getContext();
-        securityContext.setAuthentication(authentication);
-
-        mockMvc.perform(get("/"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("index"))
-                .andExpect(model().attributeExists("role"))
-                .andExpect(model().attribute("role", "ROLE_USER"));
-    }
+	@Test
+	@WithMockUser(authorities = "ROLE_ADMIN")
+	public void testIndexPageForAdminRole() throws Exception {
+		mockMvc.perform(MockMvcRequestBuilders.get("/")).andExpect(MockMvcResultMatchers.status().isOk())
+				.andExpect(MockMvcResultMatchers.view().name("index"))
+				.andExpect(MockMvcResultMatchers.model().attributeExists("role"))
+				.andExpect(MockMvcResultMatchers.model().attribute("role", "ROLE_ADMIN"));
+	}
 }
