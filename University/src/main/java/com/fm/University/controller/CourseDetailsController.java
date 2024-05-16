@@ -2,7 +2,6 @@ package com.fm.University.controller;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -107,7 +106,10 @@ public class CourseDetailsController {
 	@PostMapping("/{courseId}/remove-student")
 	public String removeStudentFromCourse(@PathVariable("courseId") Long courseId,
 			@RequestParam("studentId") Long studentId) {
-		courseStudentService.deleteCourseStudentById(studentId);
+		Long courseStudentId = courseStudentService.getCourseStudentIdByStudentIdAndCourseId(studentId, courseId);
+		if (courseStudentId != null) {
+			courseStudentService.deleteCourseStudentById(courseStudentId);
+		}
 		return "redirect:/course-details/" + courseId;
 	}
 
@@ -123,7 +125,10 @@ public class CourseDetailsController {
 	@PostMapping("/{courseId}/remove-teacher")
 	public String removeTeacherFromCourse(@PathVariable("courseId") Long courseId,
 			@RequestParam("teacherId") Long teacherId) {
-		courseTeacherService.deleteCourseTeacherById(teacherId);
+		Long courseTeacherId = courseTeacherService.getCourseTeacherIdByTeacherIdAndCourseId(teacherId, courseId);
+		if (courseTeacherId != null) {
+			courseTeacherService.deleteCourseTeacherById(courseTeacherId);
+		}
 		return "redirect:/course-details/" + courseId;
 	}
 

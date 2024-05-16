@@ -103,7 +103,11 @@ public class ClassroomDetailsController {
 	@PostMapping("/{classroomId}/remove-student")
 	public String removeStudentFromClassroom(@PathVariable("classroomId") Long classroomId,
 			@RequestParam("studentId") Long studentId) {
-		classroomStudentService.deleteClassroomStudentById(studentId);
+		Long classroomStudentId = classroomStudentService.getClassroomStudentIdByClassroomIdAndStudentId(classroomId,
+				studentId);
+		if (classroomStudentId != null) {
+			classroomStudentService.deleteClassroomStudentById(classroomStudentId);
+		}
 		return "redirect:/classroom-details/" + classroomId;
 	}
 
@@ -119,7 +123,11 @@ public class ClassroomDetailsController {
 	@PostMapping("/{classroomId}/remove-teacher")
 	public String removeTeacherFromClassroom(@PathVariable("classroomId") Long classroomId,
 			@RequestParam("teacherId") Long teacherId) {
-		classroomTeacherService.deleteClassroomTeacherById(teacherId);
+		Long classroomTeacherId = classroomTeacherService.getClassroomTeacherIdByClassroomIdAndTeacherId(classroomId,
+				teacherId);
+		if (classroomTeacherId != null) {
+			classroomTeacherService.deleteClassroomTeacherById(classroomTeacherId);
+		}
 		return "redirect:/classroom-details/" + classroomId;
 	}
 

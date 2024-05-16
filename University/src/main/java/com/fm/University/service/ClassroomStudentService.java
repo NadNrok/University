@@ -39,4 +39,8 @@ public class ClassroomStudentService {
 	public void deleteClassroomStudentById(Long id) {
 		classroomStudentRepository.deleteById(id);
 	}
+
+	public Long getClassroomStudentIdByClassroomIdAndStudentId(Long classroomId, Long studentId) {
+		return classroomStudentRepository.findClassroomStudentIdByClassroomIdAndStudentId(classroomId, studentId);
+	}
 }

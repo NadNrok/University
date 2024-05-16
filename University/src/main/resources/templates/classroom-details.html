@@ -22,7 +22,8 @@
                                 <span th:text="${student.name}"></span>
                                 <form th:action="@{/classroom-details/{classroomId}/remove-student(classroomId=${classroom.classroomId})}"
                                     method="post">
-                                    <input type="hidden" name="studentId" th:value="${student.studentId}" />
+                                    <input type="hidden" name="classroomId" th:value="${classroom.classroomId}" />
+									<input type="hidden" name="studentId" th:value="${student.studentId}" />
                                     <button type="submit" class="btn btn-danger btn-sm">Remove</button>
                                 </form>
                             </li>
@@ -46,6 +47,7 @@
                                 <span th:text="${teacher.name}"></span>
                                 <form th:action="@{/classroom-details/{classroomId}/remove-teacher(classroomId=${classroom.classroomId})}"
                                     method="post">
+                                    <input type="hidden" name="classroomId" th:value="${classroom.classroomId}" />
                                     <input type="hidden" name="teacherId" th:value="${teacher.teacherId}" />
                                     <button type="submit" class="btn btn-danger btn-sm">Remove</button>
                                 </form>
